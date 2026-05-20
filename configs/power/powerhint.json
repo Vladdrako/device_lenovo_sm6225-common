@@ -187,7 +187,8 @@
         "1"
       ],
       "DefaultIndex": 0,
-      "ResetOnInit": false
+      "ResetOnInit": false,
+      "WriteOnly": true
      }
   ],
   "Actions": [

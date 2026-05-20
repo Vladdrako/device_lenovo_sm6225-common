@@ -255,6 +255,10 @@
         <item>0</item> <!-- COLOR_MODE_DEFAULT -->
     </integer-array>
 
+    <!-- Default to landscape for tablet -->
+    <!-- 0=Portrait, 1=Landscape, 2=Reverse Portrait, 3=Reverse Landscape -->
+    <integer name="config_windowManagerDefaultRotation">1</integer>
+
     <!-- The default journal mode to use use when Write-Ahead Logging is not active.
          Choices are: OFF, DELETE, TRUNCATE, PERSIST and MEMORY.
          PERSIST may improve performance by reducing how often journal blocks are

@@ -218,6 +218,10 @@
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
 
+    <!-- Proximity check on wake configurations -->
+    <bool name="config_proximityCheckOnWake">false</bool>
+    <bool name="config_proximityCheckOnWakeEnabledByDefault">false</bool>
+
     <!-- Indicate available ColorDisplayManager.COLOR_MODE_xxx. -->
     <integer-array name="config_availableColorModes">
         <item>0</item> <!-- COLOR_MODE_NATURAL   -->

@@ -11,7 +11,7 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := cortex-a53
+TARGET_CPU_VARIANT := cortex-a73
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-a
@@ -49,6 +49,7 @@ TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
 # Display
 TARGET_USES_ION := true
 TARGET_USES_VULKAN := true
+DEBUG_RENDERENGINE_BACKEND := gles
 
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
@@ -96,6 +97,7 @@ BOARD_KERNEL_CMDLINE += cgroup_disable=pressure
 TARGET_KERNEL_CONFIG := grass-perf_defconfig
 TARGET_KERNEL_SOURCE := kernel/lenovo/tb128fu
 TARGET_KERNEL_NO_GCC := true
+TARGET_KERNEL_CLANG_COMPILE := true
 
 # Prebuilt dtb/dtbo
 TARGET_PREBUILT_DTB := $(COMMON_PATH)/prebuilt/dtb.img

@@ -316,6 +316,10 @@ vendor/lib/libc2d30_bltlib.so
 vendor/lib/libgpudataproducer.so
 vendor/lib/libgsl.so
 vendor/lib/libllvm-glnext.so
+vendor/lib/egl/libVkLayer_ADRENO_qprofiler.so
+vendor/lib/libOpenCL_adreno.so
+vendor/lib/libllvm-qgl.so
+vendor/lib/libdmabufheap.so
 vendor/lib64/egl/libEGL_adreno.so;SYMLINK=vendor/lib64/libEGL_adreno.so
 vendor/lib64/egl/libGLESv2_adreno.so;SYMLINK=vendor/lib64/libGLESv2_adreno.so
 vendor/lib64/egl/libq3dtools_esx.so
@@ -329,6 +333,10 @@ vendor/lib64/libc2d30_bltlib.so
 vendor/lib64/libgpudataproducer.so
 vendor/lib64/libgsl.so
 vendor/lib64/libllvm-glnext.so
+vendor/lib64/egl/libVkLayer_ADRENO_qprofiler.so
+vendor/lib64/libOpenCL_adreno.so
+vendor/lib64/libllvm-qgl.so
+vendor/lib64/libdmabufheap.so
 
 # IMS
 -system_ext/app/uceShimService/uceShimService.apk
@@ -799,6 +807,18 @@ vendor/lib64/libminkdescriptor.so
 vendor/lib64/liboemcrypto.so
 vendor/lib64/libtrustedapploader.so
 vendor/lib64/libwvhidl.so
+
+# Vulkan permissions
+vendor/etc/permissions/android.hardware.vulkan.compute-0.xml
+vendor/etc/permissions/android.hardware.vulkan.version-1_1.xml
+vendor/etc/permissions/android.software.opengles.deqp.level.xml
+vendor/etc/permissions/android.software.vulkan.deqp.level.xml
+
+# GPU KBC
+vendor/gpu/kbc/sequence_manifest.bin
+vendor/gpu/kbc/unified_kbcs_32.bin
+vendor/gpu/kbc/unified_kbcs_64.bin
+vendor/gpu/kbc/unified_ksqs.bin
 
 # Wi-Fi
 vendor/bin/cnss-daemon

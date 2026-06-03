@@ -395,6 +395,10 @@ PRODUCT_PACKAGES += \
     firmware_wlan_mac.bin_symlink \
     firmware_WCNSS_qcom_cfg.ini_symlink
 
+# Qualcomm Graphics Library Config (Adreno Vulkan)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/qgl_config.txt:$(TARGET_COPY_OUT_VENDOR)/gpu/qgl_config.txt
+
 # Dolby Atmos
 $(call inherit-product, vendor/motorola/dolby/dolby-vendor.mk)
 

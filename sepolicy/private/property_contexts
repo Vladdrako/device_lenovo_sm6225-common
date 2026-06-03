@@ -41,3 +41,7 @@ ro.ril.oem.wifimac             u:object_r:vendor_wifimac_prop:s0
 
 # WiFi Display
 persist.vendor.setWFDInfo.     u:object_r:vendor_wfd_sys_debug_prop:s0
+
+# Dolby
+ro.dolby.mod_uuid       u:object_r:system_prop:s0 exact string
+ro.dolby.music_stream   u:object_r:system_prop:s0 exact string

@@ -34,3 +34,10 @@ dontaudit {
   vendor_netmgrd
   vendor_qti
 } vendor_diag_device:chr_file rw_file_perms;
+
+dontaudit untrusted_app proc_tty_drivers:file { read open getattr };
+dontaudit untrusted_app qemu_hw_prop:file { read open getattr };
+dontaudit untrusted_app self:netlink_route_socket { bind nlmsg_readpriv nlmsg_getneigh };
+dontaudit priv_app device:dir open;
+dontaudit untrusted_app_29 cgroup:dir search;
+dontaudit untrusted_app lmkd_prop:file { open getattr map };

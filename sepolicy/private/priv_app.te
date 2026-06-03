@@ -1,0 +1,1 @@
+dontaudit priv_app { aac_drc_prop ab_update_gki_prop vendor_default_prop }:file { read open getattr map };

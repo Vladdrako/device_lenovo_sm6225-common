@@ -100,7 +100,6 @@ case "$target" in
                 ;;
             "Fluid")
                 setprop vendor.display.lcd_density 240
-                setprop qcom.bt.dev_power_class 2
                 ;;
             *)
                 ln -s  /system/usr/keychars/surf_keypad_qwerty.kcm.bin /system/usr/keychars/surf_keypad.kcm.bin
@@ -132,9 +131,6 @@ case "$target" in
             "Fluid")
                 setprop vendor.display.lcd_density 240
                 ;;
-            "Dragon")
-                setprop ro.sound.alsa "WM8903"
-                ;;
         esac
         ;;
 
@@ -142,10 +138,6 @@ case "$target" in
         # lcd density is write-once. Hence the separate switch case
         case "$soc_hwplatform" in
             "Liquid")
-                if [ "$soc_hwver" == "196608" ]; then # version 0x30000 is 3D sku
-                    setprop ro.sf.hwrotation 90
-                fi
-
                 setprop vendor.display.lcd_density 160
                 ;;
             "MTP")
@@ -161,19 +153,6 @@ case "$target" in
                         ;;
                 esac
             ;;
-        esac
-
-        #Set up composition type based on the target
-        case "$soc_hwid" in
-            87)
-                #8960
-                setprop debug.composition.type dyn
-                ;;
-            153|154|155|156|157|138)
-                #8064 V2 PRIME | 8930AB | 8630AB | 8230AB | 8030AB | 8960AB
-                setprop debug.composition.type c2d
-                ;;
-            *)
         esac
         ;;
 
@@ -219,9 +198,6 @@ case "$target" in
                 ;;
             "SBC")
                 setprop vendor.display.lcd_density 200
-                # SBC do not have hardware navigation keys, so enable
-                # Android sw navigation bar
-                setprop qemu.hw.mainkeys 0
                 ;;
             *)
                 setprop vendor.display.lcd_density 480
@@ -232,15 +208,12 @@ case "$target" in
         case "$soc_hwplatform" in
             "Dragon")
                 setprop vendor.display.lcd_density 240
-                setprop qemu.hw.mainkeys 0
                 ;;
             "ADP")
                 setprop vendor.display.lcd_density 160
-                setprop qemu.hw.mainkeys 0
                 ;;
             "SBC")
                 setprop vendor.display.lcd_density 240
-                setprop qemu.hw.mainkeys 0
                 ;;
             *)
                 setprop vendor.display.lcd_density 560
@@ -268,20 +241,12 @@ case "$target" in
             303|307|308|309|320|386|436)
                 # Vulkan is not supported for 8917 variants
                 setprop vendor.opengles.version 196608
-                setprop persist.graphics.vulkan.disable true
                 setprop vendor.gralloc.disable_ahardware_buffer 1
                 # Disable adsprpcd_sensorspd daemon
                 setprop vendor.fastrpc.disable.adsprpcd_sensorspd.daemon 1
                 ;;
             *)
                 setprop vendor.opengles.version 196608
-                ;;
-        esac
-        ;;
-    "msm8909")
-        case "$soc_hwplatform" in
-            *)
-                setprop persist.graphics.vulkan.disable true
                 ;;
         esac
         ;;

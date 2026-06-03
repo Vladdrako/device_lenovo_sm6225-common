@@ -49,6 +49,9 @@ genfscon sysfs /devices/platform/soc/1610000.qcom,msm-eud/power/wakeup          
 genfscon sysfs /devices/platform/soc/soc:qcom,nopmi-chg/power_supply/battery/power/wakeup                                                                                            u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:qcom,nopmi-chg/power_supply/usb/power/wakeup                                                                                                u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:gpio_keys/power/wakeup                                                                                                                      u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/4a84000.i2c/i2c-0/0-0055/wakeup                                                                                                                 u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/4a84000.i2c/i2c-0/0-0055/power/wakeup                                                                                                           u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/4a84000.i2c/i2c-0/0-0055/power_supply/bms/power/wakeup                                                                                          u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/4a84000.i2c/i2c-0/0-0065/wakeup                                                                                                                 u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/4a84000.i2c/i2c-0/0-0065/power/wakeup                                                                                                           u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/4a84000.i2c/i2c-0/0-0065/power_supply/sc8551-standalone/power/wakeup                                                                            u:object_r:sysfs_wakeup:s0
@@ -101,3 +104,6 @@ genfscon sysfs /devices/platform/soc/4a88000.i2c/i2c-1/1-006b/power_supply/slave
                                                                        u:object_r:sysfs_wakeup:s0
 
 genfscon sysfs /devices/platform/soc/soc:wt_vibrator/leds/vibrator/trigger													     u:object_r:sysfs_leds:s0
+
+genfscon sysfs /block/sde/queue/read_ahead_kb u:object_r:vendor_sysfs_devfreq:s0
+genfscon sysfs /devices/platform/soc/soc:opt/store_user u:object_r:vendor_sysfs_devfreq:s0

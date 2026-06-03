@@ -1,2 +1,31 @@
 dontaudit untrusted_app odsign_prop:file read;
 dontaudit untrusted_app system_file:file lock;
+dontaudit untrusted_app_all { qemu_hw_prop serialno_prop }:file { read open getattr map };
+dontaudit untrusted_app_all proc:file { read open getattr };
+
+dontaudit untrusted_app_32 mnt_sdcard_file:lnk_file read;
+dontaudit untrusted_app_32 shell_test_data_file:dir search;
+dontaudit untrusted_app_32 untrusted_app_32:fifo_file ioctl;
+dontaudit untrusted_app_32 init_exec:lnk_file { getattr read };
+dontaudit untrusted_app_32 system_dlkm_file:dir getattr;
+dontaudit untrusted_app_32 postinstall_mnt_dir:dir getattr;
+dontaudit untrusted_app_32 gsi_persistent_data_file:file getattr;
+dontaudit untrusted_app_32 unencrypted_data_file:dir getattr;
+dontaudit untrusted_app_32 server_configurable_flags_data_file:dir getattr;
+dontaudit untrusted_app_32 bootchart_data_file:dir read;
+dontaudit untrusted_app_32 apex_data_file:dir { read search };
+
+dontaudit untrusted_app_27 unlabeled:dir search;
+dontaudit untrusted_app_27 shell_test_data_file:dir search;
+dontaudit untrusted_app shell_test_data_file:dir search;
+
+dontaudit { untrusted_app untrusted_app_32 } rootfs:dir read;
+dontaudit { untrusted_app untrusted_app_32 } rootfs:file getattr;
+dontaudit { untrusted_app untrusted_app_32 } mirror_data_file:dir getattr;
+dontaudit { untrusted_app untrusted_app_32 } linkerconfig_file:dir getattr;
+dontaudit { untrusted_app untrusted_app_32 } sysfs:dir read;
+dontaudit { untrusted_app untrusted_app_32 } { proc_interrupts proc_max_map_count proc_version }:file read;
+dontaudit { untrusted_app untrusted_app_32 } qemu_sf_lcd_density_prop:file read;
+dontaudit { untrusted_app untrusted_app_32 } metadata_file:dir getattr;
+dontaudit { untrusted_app untrusted_app_32 } video_device:chr_file getattr;
+dontaudit { untrusted_app untrusted_app_32 } vm_data_file:dir getattr;

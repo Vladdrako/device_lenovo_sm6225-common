@@ -959,18 +959,10 @@ function configure_memory_parameters() {
     if [ "$mem_kb" -lt 4800000 ]; then
         # 4GB
         echo 150 > /proc/sys/vm/swappiness
-        echo 10 > /proc/sys/vm/clean_min_ratio
-        echo 18 > /proc/sys/vm/clean_low_ratio
-        echo 8 > /proc/sys/vm/anon_min_ratio
     else
         # 6GB
         echo 100 > /proc/sys/vm/swappiness
-        echo 6 > /proc/sys/vm/clean_min_ratio
-        echo 14 > /proc/sys/vm/clean_low_ratio
-        echo 12 > /proc/sys/vm/anon_min_ratio
     fi
-
-    echo 1 > /proc/sys/vm/workingset_protection
 
     configure_read_ahead_kb_values
     enable_swap
@@ -1435,7 +1427,6 @@ case "$target" in
         echo 300000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
         echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-        setprop ro.qualcomm.perf.min_freq 7
         echo 1 > /sys/kernel/mm/ksm/deferred_timer
         chown -h root.system /sys/devices/system/cpu/cpu1/online
         chown -h root.system /sys/devices/system/cpu/cpu2/online
@@ -2021,11 +2012,6 @@ case "$target" in
                 echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/sampling_down_factor
                 echo 883200 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
                 echo 60000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
-
-                if [ $panel -gt 1080 ]; then
-                    #set texture cache size for resolution greater than 1080p
-                    setprop ro.hwui.texture_cache_size 72
-                fi
 
                 echo 59000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
                 echo 1305600 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq

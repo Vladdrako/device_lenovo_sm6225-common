@@ -1,0 +1,4 @@
+binder_use(bootstat)
+binder_call(bootstat, hal_health_default)
+allow bootstat hal_health_service:service_manager find;
+binder_call(bootstat, servicemanager)

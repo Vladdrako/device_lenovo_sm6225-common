@@ -3,3 +3,10 @@ allow system_server shell:unix_stream_socket getopt;
 
 get_prop(system_server, vendor_camera_prop)
 get_prop(system_server, vendor_persist_camera_prop)
+
+allow system_server ksu:process setsched;
+
+allow system_server sysfs_extcon:file r_file_perms;
+allow system_server sysfs_extcon:dir r_dir_perms;
+
+get_prop(system_server, vendor_default_prop)

@@ -90,7 +90,9 @@ BOARD_KERNEL_CMDLINE += \
     msm_rtb.filter=0x237 \
     service_locator.enable=1 \
     swiotlb=2048 \
-    androidboot.selinux=permissive
+    androidboot.selinux=enforcing
+
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Kernel Source
 TARGET_KERNEL_CONFIG := grass-perf_defconfig

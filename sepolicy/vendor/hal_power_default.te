@@ -3,6 +3,9 @@ allow hal_power_default input_device:dir r_dir_perms;
 allow hal_power_default input_device:chr_file rw_file_perms;
 allow hal_power_default proc_tp_gesture:dir search;
 allow hal_power_default proc_tp_gesture:file rw_file_perms;
+allow hal_power_default hal_thermal_default:binder { call transfer };
+allow hal_power_default vendor_sysfs_msm_power:dir search;
+allow hal_power_default vendor_sysfs_msm_power:file { open write };
 
 r_dir_file(hal_power_default, input_device)
 
@@ -26,3 +29,6 @@ allow hal_power_default {
 
 get_prop(hal_power_default, vendor_powerhal_prop)
 set_prop(hal_power_default, vendor_powerhal_prop)
+
+allow hal_power_default fwk_stats_service:service_manager find;
+allow hal_power_default hal_thermal_service:service_manager find;

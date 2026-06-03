@@ -10,3 +10,27 @@ allowxperm init per_boot_file:file ioctl { F2FS_IOC_SET_PIN_FILE };
 allow init sysfs_leds:file w_file_perms;
 # dirty_background_bytes, dirty_bytes
 allow init proc:file write;
+allow init tmpfs:blk_file { read open ioctl };
+allow init tmpfs:blk_file ioctl;
+
+# Allow init to access loop devices (Required for APEX modules)
+allow init loop_device:blk_file { create setattr unlink };
+allowxperm init loop_device:blk_file ioctl {
+  LOOP_GET_STATUS64
+  LOOP_GET_STATUS
+  LOOP_SET_STATUS64
+  LOOP_SET_STATUS
+  BLKFLSBUF
+};
+
+# Allow loading kernel modules in Recovery mode
+recovery_only(`
+  allow init self:capability sys_module;
+  allow init rootfs:system module_load;
+')
+
+allow init sysfs_batteryinfo:lnk_file read;
+allow init tmpfs:blk_file { ioctl read open };
+
+dontaudit init tmpfs:blk_file ioctl;
+

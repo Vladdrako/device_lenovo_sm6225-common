@@ -1,0 +1,2 @@
+allow artd app_data_file:lnk_file read;
+allow artd media_userdir_file:dir read;

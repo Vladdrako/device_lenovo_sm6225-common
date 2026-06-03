@@ -4,6 +4,7 @@ type public_adsprpcd_file, file_type;
 
 # Camera
 type vendor_persist_camera_file, file_type, vendor_persist_type;
+type vendor_imager_metadata_file, file_type, data_file_type;
 
 # DT2W
 type proc_tp_gesture, fs_type, proc_type;
@@ -17,10 +18,18 @@ type persist_subsys_file, vendor_persist_type, file_type;
 
 # ProcFS
 type proc_last_kmsg, fs_type, proc_type;
+type proc_sched_lib_mask_cpuinfo, fs_type, proc_type;
 
 # SysFS
 type sysfs_msm_boot, fs_type, sysfs_type;
 type sysfs_msm_subsys, fs_type, sysfs_type;
+type sysfs_dt_chosen, sysfs_type, fs_type;
 
 # Thermal
 type thermal_data_file, file_type, data_file_type;
+
+# Input Devices
+type vendor_sysfs_input, fs_type, sysfs_type;
+
+# Touchscreen
+type vendor_sysfs_touchpanel, fs_type, sysfs_type;

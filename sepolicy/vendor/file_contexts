@@ -45,3 +45,18 @@
 
 # Power
 /vendor/bin/hw/android\.hardware\.power-service\.lineage-libperfmgr	u:object_r:hal_power_default_exec:s0
+
+# DMA-buf
+/dev/dma_heap/linux,cma       u:object_r:dmabuf_cma_heap_device:s0
+/dev/dma_heap/qcom,system            u:object_r:dmabuf_system_heap_device:s0
+/dev/dma_heap/qcom,system-uncached   u:object_r:dmabuf_system_heap_device:s0
+
+# PD
+/sys/devices/platform/soc/soc:rt-pd-manager/extcon(/.*)?  u:object_r:sysfs_extcon:s0
+
+/sys/devices/platform/soc/soc:qcom_wt_chg/power_supply/[^/]+/wakeup[0-9]+(/.*)?    u:object_r:sysfs_wakeup:s0
+
+# Vibrator
+/sys/devices/platform/soc/soc:wt_vibrator/leds/vibrator(/.*)?    u:object_r:sysfs_leds:s0
+
+

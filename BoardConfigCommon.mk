@@ -92,8 +92,6 @@ BOARD_KERNEL_CMDLINE += \
     swiotlb=2048 \
     androidboot.selinux=permissive
 
-BOARD_KERNEL_CMDLINE += cgroup_disable=pressure
-
 # Kernel Source
 TARGET_KERNEL_CONFIG := grass-perf_defconfig
 TARGET_KERNEL_SOURCE := kernel/lenovo/tb128fu

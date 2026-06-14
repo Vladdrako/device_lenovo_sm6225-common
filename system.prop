@@ -1,0 +1,2 @@
+ro.surface_flinger.max_refresh_rate=60
+ro.config.threaded_rendering=true

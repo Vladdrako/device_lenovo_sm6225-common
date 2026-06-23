@@ -1,2 +1,8 @@
+# ==========================================
+# HWUI App Rendering & Cache (Optimized for 2K Screen)
+# ==========================================
+ro.hwui.texture_cache_size=96
+ro.hwui.layer_cache_size=64
+ro.hwui.r_buffer_cache_size=16
 ro.surface_flinger.max_refresh_rate=60
 ro.config.threaded_rendering=true

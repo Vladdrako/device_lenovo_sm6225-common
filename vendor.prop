@@ -166,13 +166,6 @@ ro.surface_flinger.max_frame_buffer_acquired_buffers=3
 debug.sf.force_hwc_copyback=0
 debug.egl.buffering=true
 
-# ==========================================
-# HWUI App Rendering & Cache (Optimized for 2K Screen)
-# ==========================================
-ro.hwui.texture_cache_size=96
-ro.hwui.layer_cache_size=64
-ro.hwui.r_buffer_cache_size=16
-
 # Shader & EGL Cache Optimization
 ro.egl.blobcache.multifile=true
 ro.egl.blobcache.multifile_limit=33554432

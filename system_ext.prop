@@ -75,3 +75,8 @@ persist.sys.wfd.virtual=0
 
 # Zygote
 persist.device_config.runtime_native.usap_pool_enabled=true
+
+# Dolby
+ro.dolby.mod_uuid=false
+ro.dolby.music_stream=false
+

@@ -5,3 +5,6 @@ libsdsprpc.so
 libfastcvopt.so
 liblistensoundmodel2.so
 libOpenCL.so
+libqmi_cci.so
+libqmi_common_so.so
+libqmiservices.so

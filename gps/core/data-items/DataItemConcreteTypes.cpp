@@ -197,16 +197,19 @@ void ScreenStateDataItem::stringify(string& valueStr) {
     } while (0);
     EXIT_LOG_WITH_ERROR("%d", result);
 }
-void PowerConnectStateDataItem::stringify(string& valueStr) {
+void PowerConnectStateDataItem::stringify(string& /*valueStr*/) {
     int32_t result = 0;
     ENTRY_LOG();
     do {
         STRINGIFY_ERROR_CHECK_AND_DOWN_CAST(PowerConnectStateDataItem,
-                POWER_CONNECTED_STATE_DATA_ITEM_ID);
+            POWER_CONNECTED_STATE_DATA_ITEM_ID);
+        
+        /*
         valueStr.clear ();
         valueStr = POWERCONNECTSTATE_FIELD_ENABLED;
         valueStr += ": ";
         valueStr += (d->mState) ? ("true") : ("false");
+        */
     } while (0);
     EXIT_LOG_WITH_ERROR("%d", result);
 }

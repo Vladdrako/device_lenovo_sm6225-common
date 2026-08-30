@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wi-Fi SoftAP / Hotspot capabilities -->
+    <bool name="config_wifiSoftapIeee80211axSupported">false</bool>
+    <bool name="config_wifiSoftapHeSuBeamformeeSupported">false</bool>
+    <bool name="config_wifiSoftapHeSuBeamformerSupported">false</bool>
+
+    <bool name="config_wifi5ghzSupport">true</bool>
+    <bool name="config_wifiSoftapIeee80211acSupported">true</bool>
+    <bool name="config_wifiSoftapAcsSupported">true</bool>
+    <bool name="config_wifiSoftapAcsIncludeDfs">true</bool>
+    <integer name="config_wifiHardwareSoftapMaxClientCount">32</integer>
+    <string name="config_wifiSoftap2gChannelList"></string>
+
+    <!-- Scanning & MAC Randomization -->
+    <bool name="config_wifi_background_scan_support">true</bool>
+    <bool name="config_wifi_connected_mac_randomization_supported">true</bool>
+    <bool name="config_wifi_p2p_mac_randomization_supported">true</bool>
+    <bool name="config_wifiSoftapSaeSupported">true</bool>
+
+    <!-- Country Code updates -->
+    <bool name="config_wifiStaDynamicCountryCodeUpdateSupported">true</bool>
+    <bool name="config_wifi_revert_country_code_on_cellular_loss">false</bool>
+    <bool name="config_wifiUpdateCountryCodeFromScanResultGeneric">true</bool>
+
+    <!-- Concurrency & HAL -->
+    <bool name="config_wifi_hal_get_usable_channels_supported">false</bool>
+    <bool name="config_wifiConcurrencyMultiStaAsPrimarySupported">false</bool>
+</resources>

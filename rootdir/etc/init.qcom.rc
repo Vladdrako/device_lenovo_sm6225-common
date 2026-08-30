@@ -102,6 +102,20 @@ on late-init
     start vendor.qti.hardware.display.composer
 
 on early-boot
+    # Most of /mnt/vendor/persist was written before the current policy was
+    # applied, so its files carry u:object_r:unlabeled:s0 while the parent
+    # directories are labelled correctly. That makes sscrpcd/sensor HAL fail
+    # to read the sensor registry. Relabel it once the partition is mounted.
+    #
+    # --force is required: libselinux caches a SHA1 of the matching
+    # file_contexts entries in the security.sehash xattr of every directory
+    # it walks (check_context_match_for_dir in android_device.c). Those
+    # digests were written before persist/sensors had a file_contexts entry,
+    # so a plain restorecon_recursive matches the stale digest and skips the
+    # whole subtree without ever looking at the files. --force maps to
+    # SELINUX_ANDROID_RESTORECON_FORCE, which ignores the cached digest.
+    restorecon_recursive --force /mnt/vendor/persist
+
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
     # Allow subsystem (modem etc) debugging
@@ -162,12 +176,6 @@ on boot
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
-    # This location is used by QCRIL to host UNIX domain
-    # socket files used for internal IPC within QCRIL
-    # modules
-    mkdir /dev/socket/qmux_radio 0770 radio radio
-    chmod 2770 /dev/socket/qmux_radio
-
     mkdir /persist/drm 0770 system system
     mkdir /persist/bluetooth 0770 bluetooth bluetooth
     mkdir /persist/misc 0770 system system
@@ -181,8 +189,6 @@ on boot
     mkdir /dev/socket/wigig 0770 wifi wifi
 
     setprop wifi.interface wlan0
-
-    setprop ro.telephony.call_ring.multiple false
 
     #Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
@@ -259,12 +265,6 @@ on boot
     # limit discard size to 128MB in order to avoid long IO latency
     write /sys/block/sda/queue/discard_max_bytes 134217728
 
-    # Enable qcrild and data services
-    enable vendor.qcrild
-    enable vendor.qcrild2
-    enable vendor.dataqti
-    enable vendor.dataadpl
-
 # +bug 692121, lishuwen.wt,ADD,20211106, add vibrator sepolicy
     chown system system /sys/devices/platform/soc/soc:wt_vibrator/leds/vibrator/activate
     chown system system /sys/devices/platform/soc/soc:wt_vibrator/leds/vibrator/duration
@@ -276,9 +276,9 @@ on boot
     chown system system /sys/class/leds/vibrator/activate
     chown system system /sys/class/leds/vibrator/duration
     chown system system /sys/class/leds/vibrator/state
-    chmod 0666 /sys/class/leds/vibrator/activate
-    chmod 0666 /sys/class/leds/vibrator/duration
-    chmod 0666 /sys/class/leds/vibrator/state
+    chmod 0660 /sys/class/leds/vibrator/activate
+    chmod 0660 /sys/class/leds/vibrator/duration
+    chmod 0660 /sys/class/leds/vibrator/state
 
 # +bug 692121, lishuwen.wt,ADD,20211106, add main_chg sepolicy
     chown system system /sys/devices/platform/soc/4a88000.i2c/i2c-1/1-006a/power_supply/main_chg/update_now
@@ -404,22 +404,12 @@ on post-fs-data
     # Create the directories used by WiGig Sensing
     mkdir /data/vendor/sensing 0770 system wifi
 
-    # Create the directories used by CnE subsystem
-    mkdir /data/vendor/connectivity 0771 radio radio
-    chown radio radio /data/vendor/connectivity
-
     # Create directory used by audio subsystem
     mkdir /data/vendor/audio 0770 audio audio
 
     # Create directory for audio delta files
     mkdir /data/vendor/audio/acdbdata 0770 media audio
     mkdir /data/vendor/audio/acdbdata/delta 0770 media audio
-
-    # Create directory for radio
-    mkdir /data/vendor/radio 0770 system radio
-
-    # Create directory for modem_config
-    mkdir /data/vendor/modem_config 0570 radio root
 
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
@@ -468,27 +458,15 @@ on post-fs-data
 
     mkdir /data/vendor/secure_element 0777 system system
 
-    # Mark the copy complete flag to not completed
-    write /data/vendor/radio/copy_complete 0
-    chown radio radio /data/vendor/radio/copy_complete
-    chmod 0660 /data/vendor/radio/copy_complete
-
-    # copy prebuilt qcril.db files always
-    copy /vendor/radio/qcril_database/qcril.db /data/vendor/radio/qcril_prebuilt.db
-    chown radio radio /data/vendor/radio/qcril_prebuilt.db
-    chmod 0660 /data/vendor/radio/qcril_prebuilt.db
-
-    # File flags for prebuilt ril db file
-    write /data/vendor/radio/prebuilt_db_support 1
-    chown radio radio /data/vendor/radio/prebuilt_db_support
-    chmod 0400 /data/vendor/radio/prebuilt_db_support
-    write /data/vendor/radio/db_check_done 0
-    chown radio radio /data/vendor/radio/db_check_done
-    chmod 0660 /data/vendor/radio/db_check_done
-
     #Create SWAP related dirs
     mkdir /data/vendor/swap 0770 root system
     chmod 2770 /data/vendor/swap
+
+    # Bring up ZRAM here instead of waiting for init.qcom.post_boot.sh, which
+    # is class late_start and only runs after sys.boot_completed. Without this
+    # the device boots with no swap at all and lmkd kills cached apps to
+    # satisfy the low watermark.
+    swapon_all /vendor/etc/fstab.qcom
 
     # set aggressive read ahead for dm-0 and dm-1 during boot up
     write /sys/block/dm-0/queue/read_ahead_kb 2048
@@ -520,15 +498,6 @@ on property:ro.vendor.iocgrp.config=1
     write /dev/blkio/blkio.weight 1000
     write /dev/blkio/bg/blkio.weight 100
 
-on property:persist.sys.mba_boot_timeout=*
-    write /sys/module/pil_msa/parameters/pbl_mba_boot_timeout_ms ${persist.sys.mba_boot_timeout}
-
-on property:persist.sys.modem_auth_timeout=*
-    write /sys/module/pil_msa/parameters/modem_auth_timeout_ms ${persist.sys.modem_auth_timeout}
-
-on property:persist.sys.pil_proxy_timeout=*
-    write /sys/module/peripheral_loader/parameters/proxy_timeout_ms ${persist.sys.pil_proxy_timeout}
-
 on property:persist.vendor.sys.rawdump_copy=1
     write /sys/kernel/dload/emmc_dload 1
 
@@ -556,12 +525,6 @@ on property:sys.boot_completed=1
 
     #Enable powerhal hints
     setprop vendor.powerhal.init 1
-
-on property:persist.vendor.radio.atfwd.start=false
-    stop vendor.atfwd
-
-on property:vendor.radio.atfwd.start=false
-    stop vendor.atfwd
 
 on property:vendor.media.target.version=*
     setprop vendor.sys.media.target.version ${vendor.media.target.version}
@@ -593,12 +556,6 @@ service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class core
     user root
     oneshot
-
-service qmiproxy /system/bin/qmiproxy
-    class main
-    user radio
-    group radio diag
-    disabled
 
 service vendor.wigig_supplicant /vendor/bin/hw/wpa_supplicant \
     -iwigig0 -Dnl80211 -c/data/vendor/wifi/wigig_supplicant.conf \
@@ -764,14 +721,6 @@ on property:sys.lenovotb.panel.angle=2
 on property:sys.lenovotb.panel.angle=3
     write /proc/panel_direction 3
 
-on property:ro.vendor.ril.mbn_copy_completed=1
-    write /data/vendor/radio/copy_complete 1
-
-service vendor.atfwd /vendor/bin/ATFWD-daemon
-    class late_start
-    user system
-    group system radio
-
 service hostapd_fst /vendor/bin/hw/hostapd -dd -g /data/vendor/wifi/hostapd/global
     class main
     capabilities NET_ADMIN NET_RAW
@@ -784,20 +733,6 @@ service battery_monitor /system/bin/battery_monitor
     user system
     group system
     disabled
-
-service vendor.ril-daemon2 /vendor/bin/hw/rild -c 2
-    class main
-    user radio
-    disabled
-    group radio cache inet misc audio sdcard_r sdcard_rw diag oem_2901 log
-    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
-
-service vendor.ril-daemon3 /vendor/bin/hw/rild -c 3
-    class main
-    user radio
-    disabled
-    group radio cache inet misc audio sdcard_r sdcard_rw diag oem_2901 log
-    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
 
 service profiler_daemon /system/bin/profiler_daemon
     class late_start
@@ -881,13 +816,6 @@ service time_daemon /vendor/bin/time_daemon
     group system
     capabilities SYS_TIME
 
-# Set vendor-ril lib path based on Meta version
-on property:vendor.rild.libpath=*
-    setprop rild.libpath ${vendor.rild.libpath}
-
-on property:ro.vendor.radio.noril=*
-    setprop ro.radio.noril ${ro.vendor.radio.noril}
-
 service vendor.power_off_alarm /vendor/bin/power_off_alarm
     class core
     group system
@@ -929,10 +857,8 @@ service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
     task_profiles ProcessCapacityHigh HighPerformance
     onrestart restart audioserver
 
-service vendor.imsdatadaemon /vendor/bin/imsdatadaemon
+# Disable redundant legacy HIDL allocator as we now use modern AIDL allocator
+service vendor.qti.hardware.display.allocator /vendor/bin/hw/vendor.qti.hardware.display.allocator-service
     override
-    class main
-    user radio
-    socket ims_datad stream 0660 system radio
-    group radio wifi inet vendor_qti_diag log
+    class hal
     disabled

@@ -510,3 +510,9 @@ subsystem mem_buf_vm
 # DMA-buf heap
 /dev/dma_heap/system          0666   system     system
 /dev/dma_heap/system-uncached 0666   system     system
+
+# LED class vibrator
+/sys/class/leds/vibrator state        0660    system    system
+/sys/class/leds/vibrator duration     0660    system    system
+/sys/class/leds/vibrator activate     0660    system    system
+

@@ -816,6 +816,13 @@ function configure_zram_parameters() {
 
     diskSizeUnit=M
 
+    # ZRAM is normally brought up much earlier by swapon_all in post-fs-data
+    # (see fstab.qcom). If swap is already active, re-running mkswap/swapon
+    # here would corrupt the in-use swap area, so just bail out.
+    if grep -q '^/dev/block/zram0 ' /proc/swaps; then
+        return 0
+    fi
+
     if [ "$mem_kb" -lt 4800000 ]; then
         # 4Gb
         zRamSizeMB=3072

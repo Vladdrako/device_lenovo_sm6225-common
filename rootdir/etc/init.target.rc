@@ -52,7 +52,11 @@ on fs
     mount_all --early
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
-    restorecon_recursive /mnt/vendor/persist
+    # --force ignores the cached security.sehash digest, which would otherwise
+    # make this skip the pre-existing unlabeled files under persist/sensors.
+    # This runs before the early-boot pass in init.qcom.rc, so it has to force
+    # too, otherwise it just refreshes the digest and the later pass is a no-op.
+    restorecon_recursive --force /mnt/vendor/persist
     mkdir /mnt/vendor/persist/data 0700 system system
     chown system system /lenovocust
     chmod 0771 /lenovocust
@@ -91,6 +95,8 @@ on boot
 
     # Load WLAN driver
     insmod /vendor/lib/modules/qca_cld3_wlan.ko
+    mkdir /sys/kernel/debug/tracing/instances/wifi 0755 system system
+    chown system system /sys/kernel/debug/tracing/instances/wifi/free_buffer
 
 on boot && property:persist.vendor.usb.controller.default=*
     setprop vendor.usb.controller ${persist.vendor.usb.controller.default}
@@ -165,3 +171,6 @@ on property:persist.vendor.keymaster.ready=FALSE
 on property:persist.vendor.keymaster.ready=TRUE
     setprop ro.odm.lenovo.attestationkey 1
 #-ExtR baiyun1.wt,ADD, 20220304, add user getprop ro.odm.lenovo.attestationkey
+
+on property:vendor.wlan.driver.status=ok
+    start wificond

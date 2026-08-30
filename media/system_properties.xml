@@ -40,4 +40,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <!-- Bitmask for hdr disable mode: 1: dec, 2: enc -->
         <property name="vidc_disable_hdr" value="3"/>
         <property name="vidc_enc_quality_boost_enable" value="1"/>
+        <Property name="vendor.gralloc.disable_ubwc" value="0"/>
+        <Property name="debug.stagefright.omx_default_rank" value="1"/>
 </configs>

@@ -1,0 +1,42 @@
+//allocator (AIDL)
+cc_binary {
+    name: "android.hardware.graphics.allocator-service",
+    defaults: ["qtidisplay_defaults"],
+    sanitize: {
+        integer_overflow: true,
+    },
+    vendor: true,
+    relative_install_path: "hw",
+    header_libs: ["display_headers"],
+    shared_libs: [
+        "libbinder",
+        "libbinder_ndk",
+        "libhidlbase",
+        "libqdMetaData",
+        "libgrallocutils",
+        "libgralloccore",
+        "libgralloctypes",
+        "vendor.qti.hardware.display.mapper@3.0",
+        "vendor.qti.hardware.display.mapper@4.0",
+        "android.hardware.graphics.mapper@4.0",
+        "android.hardware.graphics.mapper@3.0",
+        "android.hardware.graphics.mapper@2.1",
+        "vendor.qti.hardware.display.mapperextensions@1.0",
+        "vendor.qti.hardware.display.mapperextensions@1.1",
+        "libdmabufheap",
+        "android.hardware.graphics.allocator-V1-ndk",
+    ],
+    static_libs: [
+        "libaidlcommonsupport",
+    ],
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-D__QTI_DISPLAY_GRALLOC__",
+    ],
+    srcs: [
+        "QtiAllocatorAIDL.cpp",
+        "service_aidl.cpp",
+    ],
+    init_rc: ["android.hardware.graphics.allocator-service.rc"],
+    vintf_fragments: ["android.hardware.graphics.allocator-service.xml"],
+}

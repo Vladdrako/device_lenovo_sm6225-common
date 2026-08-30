@@ -3,8 +3,11 @@ ro.ril.oem.btmac               u:object_r:vendor_btmac_prop:s0
 persist.ro.ril.oem.btmac       u:object_r:vendor_btmac_prop:s0
 
 # Camera
-ro.camera.req.fmq.             u:object_r:exported_default_prop:s0
-ro.camera.res.fmq.             u:object_r:exported_default_prop:s0
+# The trailing dot made these prefix rules that never matched the actual
+# properties, which are exactly "ro.camera.req.fmq" / "ro.camera.res.fmq".
+# vendor_init therefore fell back to default_prop and was denied.
+ro.camera.req.fmq              u:object_r:exported_default_prop:s0
+ro.camera.res.fmq              u:object_r:exported_default_prop:s0
 sys.cameratest.cameralevel     u:object_r:exported_default_prop:s0
 
 # Fingerprint
@@ -41,7 +44,3 @@ ro.ril.oem.wifimac             u:object_r:vendor_wifimac_prop:s0
 
 # WiFi Display
 persist.vendor.setWFDInfo.     u:object_r:vendor_wfd_sys_debug_prop:s0
-
-# Dolby
-ro.dolby.mod_uuid       u:object_r:system_prop:s0 exact string
-ro.dolby.music_stream   u:object_r:system_prop:s0 exact string

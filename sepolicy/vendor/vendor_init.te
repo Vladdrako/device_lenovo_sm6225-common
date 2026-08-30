@@ -12,5 +12,13 @@ allow vendor_init block_device:blk_file setattr;
 allow vendor_init block_device:lnk_file setattr;
 
 set_prop(vendor_init, vendor_verity_prop)
-set_prop(vendor_init, vendor_dolby_prop)
 set_prop(vendor_init, vendor_vulkan_prop)
+
+set_prop(vendor_init, vendor_camera_prop)
+
+# vendor.mm.enable.qcom_parser is set from init.qcom.rc; the type already
+# exists in the QTI policy, only the write permission was missing.
+set_prop(vendor_init, vendor_mm_parser_prop)
+
+# init.qcom.rc creates a tracing instance for the wlan driver
+allow vendor_init debugfs_tracing_instances:dir { add_name create write };

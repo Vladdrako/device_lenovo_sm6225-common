@@ -1,0 +1,4 @@
+type hal_nlinterceptor_default, domain;
+type hal_nlinterceptor_default_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_nlinterceptor_default)
+binder_call(hal_nlinterceptor_default, servicemanager)

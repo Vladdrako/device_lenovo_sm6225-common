@@ -1,0 +1,5 @@
+get_prop(platform_app, bpf_progs_loaded_prop)
+
+get_prop(platform_app, aac_drc_prop)
+get_prop(platform_app, adbd_prop)
+get_prop(platform_app, bootanim_config_prop)

@@ -11,3 +11,7 @@ allow vendor_qti_init_shell vendor_wifi_vendor_data_file:dir search;
 allow vendor_qti_init_shell vendor_wifi_vendor_data_file:file r_file_perms;
 allow vendor_qti_init_shell sysfs_battery:file setattr;
 allow vendor_qti_init_shell sysfs:file w_file_perms;
+
+# configure_zram_parameters() in init.qcom.post_boot.sh checks /proc/swaps
+# before touching zram, so it does not re-mkswap an already active device.
+allow vendor_qti_init_shell proc_swaps:file r_file_perms;

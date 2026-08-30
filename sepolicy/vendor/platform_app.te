@@ -1,0 +1,4 @@
+get_prop(platform_app, vendor_audio_prop)
+get_prop(platform_app, vendor_opengles_prop)
+get_prop(platform_app, vendor_display_prop)
+get_prop(platform_app, bluetooth_finder_prop)

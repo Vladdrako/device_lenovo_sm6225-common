@@ -31,4 +31,4 @@ get_prop(hal_power_default, vendor_powerhal_prop)
 set_prop(hal_power_default, vendor_powerhal_prop)
 
 allow hal_power_default fwk_stats_service:service_manager find;
-allow hal_power_default hal_thermal_service:service_manager find;
+hal_client_domain(hal_power_default, hal_thermal)

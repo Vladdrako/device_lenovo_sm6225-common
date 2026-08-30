@@ -8,5 +8,3 @@ allow system_server ksu:process setsched;
 
 allow system_server sysfs_extcon:file r_file_perms;
 allow system_server sysfs_extcon:dir r_dir_perms;
-
-get_prop(system_server, vendor_default_prop)

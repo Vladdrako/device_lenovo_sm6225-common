@@ -2,4 +2,15 @@ allow system_suspend sysfs:dir { open read };
 allow system_suspend sysfs:file { getattr };
 dontaudit system_suspend sysfs:file { open read };
 r_dir_file(system_suspend, sysfs_net)
-r_dir_file(system_suspend, sysfs_batteryinfo)
+r_dir_file(system_suspend, sysfs_power)
+
+# system_suspend enumerates the wakeup source under the wt_hvdcp charger.
+# The kernel numbers those nodes dynamically (wakeup28/wakeup29/... changes
+# between boots), so a genfscon entry with a fixed number is unreliable and
+# the node ends up with its parent's label instead of sysfs_wakeup.
+#
+# Do NOT grant sysfs_batteryinfo here: system_suspend is coredomain, and
+# domain.te has a full_treble_only neverallow on
+# "coredomain sysfs_batteryinfo:file { open read }" which would fail the build.
+dontaudit system_suspend sysfs_batteryinfo:dir search;
+dontaudit system_suspend sysfs_batteryinfo:file r_file_perms;

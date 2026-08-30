@@ -41,3 +41,22 @@ dontaudit untrusted_app self:netlink_route_socket { bind nlmsg_readpriv nlmsg_ge
 dontaudit priv_app device:dir open;
 dontaudit untrusted_app_29 cgroup:dir search;
 dontaudit untrusted_app lmkd_prop:file { open getattr map };
+
+# The QTI perf HAL probes /sys/kernel/mm/ksm/{sleep_millisecs,pages_to_scan}
+# on every boot. KSM is compiled in but left disabled (ksm/run == 0), so the
+# reads serve no purpose here. Generic sysfs, so granting it would open far
+# more than KSM; just silence it.
+dontaudit vendor_hal_perf_default sysfs:file r_file_perms;
+
+# system_server probes ro.vendor.product.ztename, which does not exist on this
+# device and therefore falls back to vendor_default_prop. Reading vendor
+# default props from a coredomain is intentionally not allowed.
+dontaudit system_server vendor_default_prop:file r_file_perms;
+
+# crash_dump writes the crashing process' memfd when an app (e.g. Termux)
+# spawns a native child that dies. Harmless and noisy.
+dontaudit crash_dump tmpfs:file write;
+
+# platform_app (systemui) probes ro.usb.uvc.enabled, which is not set on
+# this device. The property exists in the vendor prop file but is unset.
+dontaudit platform_app usb_uvc_enabled_prop:file r_file_perms;

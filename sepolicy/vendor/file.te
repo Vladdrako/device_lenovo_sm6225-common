@@ -27,6 +27,7 @@ type sysfs_dt_chosen, sysfs_type, fs_type;
 
 # Thermal
 type thermal_data_file, file_type, data_file_type;
+type thermal_socket, file_type, data_file_type;
 
 # Input Devices
 type vendor_sysfs_input, fs_type, sysfs_type;

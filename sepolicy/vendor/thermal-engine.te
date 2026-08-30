@@ -7,3 +7,9 @@ allow vendor_thermal-engine {
 unix_socket_connect(vendor_thermal-engine, property, init);
 
 set_prop(vendor_thermal-engine, vendor_thermal_normal_prop)
+
+r_dir_file(vendor_thermal-engine, sysfs_batteryinfo)
+r_dir_file(vendor_thermal-engine, sysfs_battery)
+
+allow vendor_thermal-engine sysfs_wakeup:dir r_dir_perms;
+allow vendor_thermal-engine sysfs_wakeup:file r_file_perms;

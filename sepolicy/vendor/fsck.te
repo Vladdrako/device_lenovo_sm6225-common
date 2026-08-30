@@ -2,3 +2,9 @@ allow fsck vendor_custom_ab_block_device:blk_file rw_file_perms;
 allow fsck_untrusted vold_device:blk_file ioctl;
 allowxperm fsck_untrusted vold_device:blk_file ioctl 0x127b;
 allow fsck sysfs_batteryinfo:dir search;
+
+# fsck.exfat walks /sys/.../block/mmcblk0/mmcblk0p1 when checking an external
+# SD card. AOSP already has dontaudit for sysfs:file, but not for the dir
+# itself. This is purely informational for fsck, so silence it rather than
+# granting access.
+dontaudit fsck_untrusted sysfs:dir r_dir_perms;

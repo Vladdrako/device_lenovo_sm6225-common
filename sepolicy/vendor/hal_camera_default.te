@@ -29,3 +29,7 @@ binder_call(hal_camera_default, system_server)
 
 set_prop(hal_camera_default, vendor_camera_prop)
 
+allow hal_camera_default vendor_thermal-engine:unix_stream_socket connectto;
+allow hal_camera_default thermal_socket:sock_file write;
+
+get_prop(hal_camera_default, vendor_usb_prop)

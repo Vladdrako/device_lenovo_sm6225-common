@@ -3,7 +3,11 @@ dontaudit untrusted_app system_file:file lock;
 dontaudit untrusted_app_all { qemu_hw_prop serialno_prop }:file { read open getattr map };
 dontaudit untrusted_app_all proc:file { read open getattr };
 
-dontaudit untrusted_app_32 mnt_sdcard_file:lnk_file read;
+# dex2oat_exec is a private type not available in vendor sepolicy scope,
+# so this dontaudit lives in private/untrusted_app.te instead of vendor/.
+dontaudit untrusted_app dex2oat_exec:file getattr;
+
+dontaudit untrusted_app_32 mnt_sdcard_file:lnk_file { read getattr };
 dontaudit untrusted_app_32 shell_test_data_file:dir search;
 dontaudit untrusted_app_32 untrusted_app_32:fifo_file ioctl;
 dontaudit untrusted_app_32 init_exec:lnk_file { getattr read };
@@ -12,7 +16,7 @@ dontaudit untrusted_app_32 postinstall_mnt_dir:dir getattr;
 dontaudit untrusted_app_32 gsi_persistent_data_file:file getattr;
 dontaudit untrusted_app_32 unencrypted_data_file:dir getattr;
 dontaudit untrusted_app_32 server_configurable_flags_data_file:dir getattr;
-dontaudit untrusted_app_32 bootchart_data_file:dir read;
+dontaudit untrusted_app_32 bootchart_data_file:dir { read search };
 dontaudit untrusted_app_32 apex_data_file:dir { read search };
 
 dontaudit untrusted_app_27 unlabeled:dir search;

@@ -1,1 +1,17 @@
 allow init property_type:file { append create getattr map open read relabelto rename setattr unlink write };
+
+# During early boot, init scans and relabels files on /system and other
+# partitions. Some files (from Magisk modules) may have stale labels that
+# need relabelfrom. We use dontaudit because domain.te has a neverallow
+# on coredomain relabelfrom of system_file_type/vendor_file_type.
+# The denials are harmless - init proceeds without relabeling these files.
+dontaudit init system_file:dir relabelfrom;
+dontaudit init system_file:{ file lnk_file } relabelfrom;
+dontaudit init system_lib_file:dir relabelfrom;
+dontaudit init system_lib_file:file relabelfrom;
+dontaudit init same_process_hal_file:file relabelfrom;
+
+# Some init paths probe attributes on files they don't otherwise need.
+dontaudit init system_file:sock_file getattr;
+dontaudit init dex2oat_exec:file getattr;
+dontaudit init app_data_file:file getattr;

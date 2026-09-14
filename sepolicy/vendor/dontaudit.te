@@ -23,6 +23,7 @@ dontaudit untrusted_app_all sysfs_net:dir search;
 
 dontaudit {
   hal_audio_default
+  hal_bluetooth_default
   hal_graphics_composer_default
   hal_sensors_default
   rild
@@ -42,6 +43,14 @@ dontaudit priv_app device:dir open;
 dontaudit untrusted_app_29 cgroup:dir search;
 dontaudit untrusted_app lmkd_prop:file { open getattr map };
 
+# Shell debug access to vendor paths (ls, sha256sum on vendor partitions)
+dontaudit shell vendor_firmware_file:dir { getattr search open read };
+dontaudit shell adsprpcd_file:file { getattr open read };
+dontaudit shell mnt_vendor_file:dir search;
+
+# Processes probing standard AOSP properties they shouldn't access
+dontaudit { untrusted_app untrusted_app_32 } serialno_prop:file { read open getattr };
+
 # The QTI perf HAL probes /sys/kernel/mm/ksm/{sleep_millisecs,pages_to_scan}
 # on every boot. KSM is compiled in but left disabled (ksm/run == 0), so the
 # reads serve no purpose here. Generic sysfs, so granting it would open far
@@ -60,3 +69,55 @@ dontaudit crash_dump tmpfs:file write;
 # platform_app (systemui) probes ro.usb.uvc.enabled, which is not set on
 # this device. The property exists in the vendor prop file but is unset.
 dontaudit platform_app usb_uvc_enabled_prop:file r_file_perms;
+
+# prng_seeder writes to /dev/kmsg_debug during early boot. The device is
+# tmpfs-labeled and this write is expected noise from cryptographic
+# self-tests, not security-relevant.
+# Note: boringssl_self_test and vendor_boringssl_self_test are private types
+# not exported to vendor sepolicy scope, so they are omitted here.
+# These can be dontaudited in the platform private sepolicy instead if needed.
+dontaudit prng_seeder tmpfs:chr_file write;
+
+# system_server must not open arbitrary shell temp files under /data/local/tmp
+dontaudit system_server shell_data_file:file open;
+
+# dex2oat probing system_data_file during compilation is normal.
+# Note: dex2oat is a coredomain (private type), so this dontaudit is in
+# sepolicy/private/dontaudit.te instead of vendor/.
+# artd accessing app-specific media_userdir_file directories (e.g. "lp")
+dontaudit artd media_userdir_file:dir open;
+
+# Isolated processes (Google Play Services ThreadPoolForeg) setattr on
+# app_data_file - normal cache file updates
+dontaudit isolated_app app_data_file:file setattr;
+
+# platform_app accessing unlabeled app data dirs
+# (happens when an app's data directory was created without proper labels)
+dontaudit platform_app unlabeled:dir search;
+
+# system_suspend probes suspend.debug.wakestats_log.enabled on every
+# wakeup scan. This property is not set on this device.
+# Note: system_suspend is a private type, so this dontaudit is in
+# sepolicy/private/dontaudit.te instead of vendor/.
+
+# Apps probing dex2oat_exec (dexopt service) and cgroup hierarchies during
+# process monitoring / memory pressure checks. Normal on AOSP devices.
+# Note: dex2oat_exec is a private type, so the dex2oat_exec rule is in
+# sepolicy/private/untrusted_app.te instead.
+dontaudit untrusted_app cgroup:dir search;
+dontaudit untrusted_app cgroup_v2:dir search;
+
+# untrusted_app_27 (Android 13 sandboxed app) probing system_data_file
+# for dex cache metadata. Normal behavior.
+dontaudit untrusted_app_27 system_data_file:file open;
+
+# untrusted_app_32 probing various directories during startup and
+# media scanning (StorageManager, file pickers, etc.)
+dontaudit untrusted_app_32 apex_info_file:file getattr;
+dontaudit untrusted_app_32 apk_private_data_file:dir search;
+dontaudit untrusted_app_32 apex_mnt_dir:dir read;
+dontaudit untrusted_app_32 anr_data_file:dir read;
+dontaudit untrusted_app_32 anr_data_file:file getattr;
+dontaudit untrusted_app_32 mnt_product_file:dir getattr;
+dontaudit untrusted_app_32 mnt_sdcard_file:lnk_file getattr;
+dontaudit untrusted_app_32 staging_data_file:dir search;

@@ -43,3 +43,8 @@ vendor.sys.thermal.                             u:object_r:vendor_thermal_normal
 vendor.powerhal.                                u:object_r:vendor_powerhal_prop:s0
 
 ro.odm.lenovo.attestationkey    u:object_r:vendor_default_prop:s0
+ 
+# ADB TLS and Bluetooth Finder properties are system properties, not vendor
+# properties. They are defined in sepolicy/system_ext/private/property_contexts
+# instead to comply with VTS vendor property namespace requirements.
+

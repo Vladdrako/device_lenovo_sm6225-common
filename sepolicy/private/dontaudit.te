@@ -1,3 +1,22 @@
 # please don't kill yourself unless it's allowed
 dontaudit domain self:capability kill;
 dontaudit odrefresh property_type:file { map getattr open };
+
+# prng_seeder and boringssl self-tests write to /dev/kmsg_debug during early
+# boot. The device is tmpfs-labeled and these writes are expected noise from
+# cryptographic self-tests, not security-relevant. These types are private
+# (not exported to vendor sepolicy), so dontaudit is only possible here.
+dontaudit { prng_seeder vendor_boringssl_self_test boringssl_self_test } tmpfs:chr_file write;
+
+# dex2oat and dex2oat_exec are private coredomain types (not available in
+# vendor sepolicy scope), so these dontaudit rules live here in private/.
+# dex2oat probes system_data_file during compilation - normal behavior.
+dontaudit dex2oat system_data_file:dir search;
+# untrusted_app probing dex2oat_exec file attributes - normal behavior.
+dontaudit untrusted_app dex2oat_exec:file getattr;
+
+# system_suspend probes suspend.debug.wakestats_log.enabled on every
+# wakeup scan. This property is not set on this device.
+# Note: system_suspend is a private type, so this dontaudit lives here
+# instead of vendor/dontaudit.te.
+dontaudit system_suspend { default_prop vendor_default_prop }:file r_file_perms;

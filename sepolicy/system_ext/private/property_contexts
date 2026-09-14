@@ -1,1 +1,10 @@
 ro.camera.req.fmq  u:object_r:vendor_camera_prop:s0 exact string
+
+# ADB TLS - these are system properties accessed by adbd.
+# Using the AOSP standard contexts for ADB properties.
+persist.adb.tls_server.enable   u:object_r:system_adbd_prop:s0 exact bool
+service.adb.tls.port            u:object_r:adbd_prop:s0 exact int
+
+# Bluetooth Finder - gmscore reads this property to check if
+# Fast Pair / Bluetooth Finder is supported on this device.
+persist.bluetooth.finder.       u:object_r:bluetooth_finder_prop:s0

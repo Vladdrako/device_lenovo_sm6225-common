@@ -965,10 +965,18 @@ function configure_memory_parameters() {
 
     if [ "$mem_kb" -lt 4800000 ]; then
         # 4GB
-        echo 150 > /proc/sys/vm/swappiness
+        echo 80 > /proc/sys/vm/swappiness
     else
         # 6GB
-        echo 100 > /proc/sys/vm/swappiness
+        echo 60 > /proc/sys/vm/swappiness
+    fi
+    echo 100 > /proc/sys/vm/vfs_cache_pressure
+    if [ -f /sys/kernel/mm/lru_gen/min_ttl_ms ]; then
+        echo 1000 > /sys/kernel/mm/lru_gen/min_ttl_ms
+    fi
+    if [ -d /sys/block/mmcblk0 ]; then
+        echo mq-deadline > /sys/block/mmcblk0/queue/scheduler 2>/dev/null
+        echo 512 > /sys/block/mmcblk0/queue/read_ahead_kb 2>/dev/null
     fi
 
     configure_read_ahead_kb_values
@@ -4159,24 +4167,21 @@ case "$target" in
 
             # configure governor settings for little cluster
             echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-            echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
-            echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
-            echo 1516800 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq
+            echo 1000 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+            echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+            echo 1190400 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq
             echo 691200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
             echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/rtg_boost_freq
 
             # configure governor settings for big cluster
             echo "schedutil" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-            echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/up_rate_limit_us
-            echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/down_rate_limit_us
-            echo 1344000 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/hispeed_freq
-            echo 1056000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+            echo 10000 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/up_rate_limit_us
+            echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/down_rate_limit_us
+            echo 1766400 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/hispeed_freq
+            echo 300000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
             echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/rtg_boost_freq
 
-            echo "0:1190000" > /sys/devices/system/cpu/cpu_boost/input_boost_freq
-            echo 80 > /sys/devices/system/cpu/cpu_boost/input_boost_ms
-
-	    echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+            echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
 
             # sched_load_boost as -6 is equivalent to target load as 85. It is per cpu tunable.
             echo -6 >  /sys/devices/system/cpu/cpu0/sched_load_boost
@@ -4187,8 +4192,8 @@ case "$target" in
             echo -6 >  /sys/devices/system/cpu/cpu5/sched_load_boost
             echo -6 >  /sys/devices/system/cpu/cpu6/sched_load_boost
             echo -6 >  /sys/devices/system/cpu/cpu7/sched_load_boost
-            echo 85 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
-            echo 85 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/hispeed_load
+            echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
+            echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/hispeed_load
 
             # Set Memory parameters
             configure_memory_parameters
@@ -4216,6 +4221,11 @@ case "$target" in
                 done
 
             done
+
+            for d in /sys/class/devfreq/soc:qcom,cpu*-cpu-ddr-lat*; do
+                [ -f $d/governor ] && echo "mem_latency" > $d/governor
+            done
+
             # memlat specific settings are moved to seperate file under
             # device/target specific folder
             setprop vendor.dcvs.prop 1
@@ -4234,12 +4244,10 @@ case "$target" in
             # Turn on sleep modes
             echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 
-            # Touch Boost
-            #+ Chk107895, aishuyi.wt, add, 20211215, touch boost
-            echo "0:1900800 1:1900800 2:1900800 3:1900800 4:2400000 5:2400000 6:2400000 7:2400000" > /sys/devices/system/cpu/cpu_boost/input_boost_freq
-            echo 40 > /sys/devices/system/cpu/cpu_boost/input_boost_ms
-            echo 1 > /sys/devices/system/cpu/cpu_boost/sched_boost_on_input
-            #- Chk107895, aishuyi.wt, add, 20211215, touch boost
+            # Touch Boost - optimized for battery and responsiveness
+            echo "0:1190400 1:1190400 2:1190400 3:1190400 4:0 5:0 6:0 7:0" > /sys/devices/system/cpu/cpu_boost/input_boost_freq
+            echo 20 > /sys/devices/system/cpu/cpu_boost/input_boost_ms
+            echo 0 > /sys/devices/system/cpu/cpu_boost/sched_boost_on_input
 
             ;;
         esac

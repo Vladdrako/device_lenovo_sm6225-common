@@ -58,7 +58,7 @@
         "806400",
         "300000"
       ],
-      "DefaultIndex": 5,
+      "DefaultIndex": 6,
       "ResetOnInit": true
     },
     {
@@ -203,7 +203,7 @@
       "PowerHint": "INTERACTION",
       "Node": "CPUBigClusterMinFreq",
       "Duration": 0,
-      "Value": "1344000"
+      "Value": "806400"
     },
     {
       "PowerHint": "INTERACTION",
@@ -293,7 +293,7 @@
       "PowerHint": "VIDEO_DECODE",
       "Node": "CPUBigClusterMinFreq",
       "Duration": 0,
-      "Value": "1344000"
+      "Value": "300000"
     },
     {
       "PowerHint": "VIDEO_DECODE",
@@ -305,7 +305,7 @@
       "PowerHint": "VIDEO_DECODE",
       "Node": "CPUBWMinFreq",
       "Duration": 0,
-      "Value": "9155"
+      "Value": "4173"
     },
     {
       "PowerHint": "AUDIO_LOW_LATENCY",

@@ -1,1 +1,4 @@
 get_prop(gpuservice, graphics_config_prop)
+
+# Allow gpuservice to access BPF maps (for custom kernel BPF changes)
+allow gpuservice fs_bpf:file getattr;

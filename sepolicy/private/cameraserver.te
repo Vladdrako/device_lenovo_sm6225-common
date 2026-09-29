@@ -1,1 +1,7 @@
 allow cameraserver vendor_sys_video_prop:file read;
+
+# mediacodeclist_generator reads vendor video props while building the serialized
+# MediaCodecList at boot. Without this it is denied and the codec list falls back.
+# The kernel log shows it needs `open` as well as `read`:
+#   avc:  denied { open } for comm="mediacodeclist_" path="/dev/__properties__/u:object_r:vendor_sys_video_prop:s0"
+allow mediacodeclist_generator vendor_sys_video_prop:file { read open getattr map };

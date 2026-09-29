@@ -1,0 +1,1 @@
+allow apexd loop_control_device:chr_file { read write open getattr ioctl };

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.overlay.tethering.ncm">
+
+    <!-- android:targetName is REQUIRED. com.android.networkstack.tethering
+         declares <overlayable name="TetheringConfig">, and idmap2d rejects
+         any resource not covered by a named overlayable. Without this the
+         overlay loads but every value is silently dropped. -->
+    <overlay
+        android:targetPackage="com.android.networkstack.tethering"
+        android:targetName="TetheringConfig"
+        android:isStatic="true"
+        android:priority="10" />
+</manifest>

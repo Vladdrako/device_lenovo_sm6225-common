@@ -24,12 +24,17 @@
 
     <bool name="config_hotswapCapable">false</bool>
     <bool name="config_cellBroadcastAppLinks">false</bool>
-    <bool name="skip_restoring_network_selection">false</bool>
-    <bool name="config_show_emergency_call_back_in_power_menu">false</bool>
+
+    <!-- REMOVED: skip_restoring_network_selection
+         Only defined as a PRIVATE symbol in framework-res symbols.xml,
+         which an RRO cannot overlay. To change this it has to be set as
+         a build property, not via an overlay.
+         REMOVED: config_show_emergency_call_back_in_power_menu
+         REMOVED: config_dynamic_bind_ims
+         Neither name exists anywhere in framework-res in this tree. -->
 
     <bool name="config_device_volte_available">false</bool>
     <bool name="config_device_wfc_ims_available">false</bool>
-    <bool name="config_dynamic_bind_ims">false</bool>
     <string name="config_wlan_network_service_package" translatable="false"></string>
     <string name="config_qualified_networks_service_package" translatable="false"></string>
 </resources>

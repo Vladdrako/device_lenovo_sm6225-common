@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Only track actual Ethernet interfaces (eth0, eth1, …), NOT USB
+         gadget interfaces (usb0, usb1, …). The AOSP default is (usb|eth)\d+
+         which causes EthernetNetworkFactory to claim the USB tethering
+         downstream and run DHCP on it, wiping the static address that
+         Tethering.java assigned. -->
+    <string translatable="false" name="config_ethernet_iface_regex">eth\\d+</string>
+</resources>

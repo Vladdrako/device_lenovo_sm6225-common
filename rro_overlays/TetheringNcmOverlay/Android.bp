@@ -1,0 +1,7 @@
+runtime_resource_overlay {
+    name: "TetheringNcmOverlay",
+    theme: "TetheringNcmOverlay",
+    sdk_version: "current",
+    resource_dirs: ["res"],
+    product_specific: true,
+}

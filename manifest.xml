@@ -41,12 +41,21 @@
         <transport>hwbinder</transport>
         <fqname>@1.0::IOffloadConfig/default</fqname>
     </hal>
-    <hal format="hidl">
-        <name>android.hardware.tetheroffload.control</name>
-        <transport>hwbinder</transport>
-        <fqname>@1.0::IOffloadControl/default</fqname>
-    </hal>
-    <hal format="hidl">
+    <!-- android.hardware.tetheroffload.control was declared here, but no service binary
+         for it is ever installed (only the passthrough .so libraries). hwservicemanager then
+         retries ctl.interface_start once per second forever, which blocks netd and makes
+         'dumpsys tethering' time out. Stock firmware only declares tetheroffload.config,
+         which is a passive library and needs no binary. Offload is optional; tethering
+         falls back to software forwarding.
+
+         android.hardware.wifi.hostapd is deliberately NOT declared here.
+         /vendor/bin/hw/hostapd is an AIDL service (aidl::...IHostapd) and,
+         like android.hardware.wifi.supplicant, AIDL HALs register themselves
+         without a VINTF entry. A previous hidl @1.0 declaration here was
+         wrong and had to be removed; the SoftAP does not start from a missing
+         or malformed VINTF entry. See the device tree rro_overlays for the
+         SoftAP band/security settings. -->
+<hal format="hidl">
         <name>com.dsi.ant</name>
         <transport>hwbinder</transport>
         <fqname>@1.0::IAnt/default</fqname>

@@ -2,8 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.device.tb128fu.overlay.wifi">
 
+    <!-- android:targetName is REQUIRED here. com.android.wifi.resources
+         declares an <overlayable name="WifiCustomization"> policy, and on
+         Android 12+ idmap2d rejects any resource that is not covered by a
+         named overlayable. Without this attribute every value in this
+         overlay was silently dropped at boot:
+
+           W idmap2d: overlay '/product/overlay/WifiResCommon/WifiResCommon.apk'
+             is not allowed to overlay resource 'bool/config_wifi5ghzSupport'
+             in target: <overlay> android:targetName "" does not match
+             overlayable name "WifiCustomization"
+
+         See packages/modules/Wifi/service/ServiceWifiResources/res/values/overlayable.xml -->
     <overlay
         android:targetPackage="com.android.wifi.resources"
+        android:targetName="WifiCustomization"
         android:isStatic="true"
         android:priority="1" />
 </manifest>

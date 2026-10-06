@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Which USB function should be enabled when TETHERING_USB is requested.
+         0: RNDIS, 1: NCM.
+
+         This device must use NCM. The QCOM RNDIS gadget function
+         (drivers/usb/gadget/function/f_qc_rndis.c) rejects every frame it
+         receives on this hardware: usb0 showed 1137 RX packets / 1137 RX
+         errors (100%), while the NCM function on the same port showed
+         457 packets / 0 errors. With RNDIS the interface also never stays
+         up long enough for netd's tethering address to survive, so the
+         host gets a DHCP lease but can never ARP the gateway.
+
+         TetheringConfiguration.isUsingNcm() reads this value, and
+         Tethering.java then drives the NCM USB function instead of RNDIS. -->
+    <integer name="config_tether_usb_functions">1</integer>
+
+    <!-- List of regexpressions describing the interface that represents a
+         tetherable NCM interface.
+
+         AOSP ships this array empty, which leaves
+         TetheringConfiguration taking the RNDIS branch even when
+         isUsingNcm() is true, so netd never recognises the NCM interface
+         as tetherable. Populating it makes the NCM branch take effect:
+         when isUsingNcm() && ncmRegexs.length != 0, these values replace
+         tetherableUsbRegexs and tetherableNcmRegexs is cleared.
+
+         The f_ncm gadget driver on this board names the interface usb1
+         (not ncm0), so "ncm\\d" is listed for correctness on other
+         function orders, and "usb\\d" is what actually matches here. -->
+    <string-array name="config_tether_ncm_regexs" translatable="false">
+        <item>"ncm\\d"</item>
+        <item>"usb\\d"</item>
+    </string-array>
+
+</resources>

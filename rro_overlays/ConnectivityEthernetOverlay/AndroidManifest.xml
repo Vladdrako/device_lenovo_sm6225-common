@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.device.tb128fu.overlay.connectivity">
+
+    <!-- Narrow the EthernetTracker interface filter so it does NOT match
+         usb0. Without this, EthernetNetworkFactory claims the tethering
+         downstream interface, starts an IpClient/DHCP on it, and wipes the
+         static 192.168.42.x / 10.250.x.x address that Tethering assigned.
+         Result: the host gets a DHCP lease but the gateway address
+         disappears from usb0, so no connectivity. -->
+    <overlay
+        android:targetPackage="com.android.connectivity.resources"
+        android:targetName="ServiceConnectivityResourcesConfig"
+        android:isStatic="true"
+        android:priority="10" />
+</manifest>

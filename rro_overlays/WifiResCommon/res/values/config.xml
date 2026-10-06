@@ -1,29 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Wi-Fi SoftAP / Hotspot capabilities -->
+
+    <!-- ==================================================================
+         Every name below must exist in the WifiCustomization overlayable
+         policy at packages/modules/Wifi/service/ServiceWifiResources/
+         res/values/overlayable.xml, AND the overlay manifest must set
+         android:targetName="WifiCustomization". This file previously
+         failed both tests, so none of it was ever applied:
+
+           W idmap2d: overlay '/product/overlay/WifiResCommon/...apk' is
+             not allowed to overlay resource 'bool/config_wifi5ghzSupport'
+             in target: <overlay> android:targetName "" does not match
+             overlayable name "WifiCustomization"
+
+         Several entries also used names that do not exist at all in this
+         tree; those were dropped even before the targetName problem.
+         The working names are the lowercase-underscore spellings below.
+         ================================================================== -->
+
+    <!-- 5 GHz support. This is the switch that gates the SoftAP band
+         picker; the radio itself is fine (iw reports Band 2 / 5180 MHz). -->
+    <bool name="config_wifi5ghzSupport">true</bool>
+    <bool name="config_wifi24ghzSupport">true</bool>
+
+    <!-- SoftAP 5 GHz channel list, needed once the 5 GHz band is enabled.
+         5180-5825 covers channels 36-165. -->
+    <string name="config_wifiSoftap5gChannelList" translatable="false"></string>
+
+    <!-- WPA3-SAE (WPA3 only) and mixed WPA2/WPA3. These are the correct
+         names; config_wifiSoftapSaeSupported does not exist in this tree
+         and was silently ignored. -->
+    <bool name="config_wifi_softap_sae_supported">true</bool>
+
+    <!-- ACS / 802.11ac. Correct names. -->
+    <bool name="config_wifi_softap_acs_supported">true</bool>
+    <bool name="config_wifi_softap_ieee80211ac_supported">true</bool>
+    <bool name="config_wifiSoftapAcsIncludeDfs">true</bool>
+
+    <!-- SoftAP hardware capabilities. -->
     <bool name="config_wifiSoftapIeee80211axSupported">false</bool>
     <bool name="config_wifiSoftapHeSuBeamformeeSupported">false</bool>
     <bool name="config_wifiSoftapHeSuBeamformerSupported">false</bool>
-
-    <bool name="config_wifi5ghzSupport">true</bool>
-    <bool name="config_wifiSoftapIeee80211acSupported">true</bool>
-    <bool name="config_wifiSoftapAcsSupported">true</bool>
-    <bool name="config_wifiSoftapAcsIncludeDfs">true</bool>
     <integer name="config_wifiHardwareSoftapMaxClientCount">32</integer>
-    <string name="config_wifiSoftap2gChannelList"></string>
+    <string name="config_wifiSoftap2gChannelList" translatable="false"></string>
 
-    <!-- Scanning & MAC Randomization -->
+    <!-- Country code. The driver reports ro.boot.wificountrycode=00, which
+         is not a valid ISO country, so the regulatory domain never unlocks
+         5 GHz for SoftAP and the band picker shows 2.4 GHz only. Let the
+         framework pick the region per network it is attached to. -->
+    <bool name="config_wifiStaDynamicCountryCodeUpdateSupported">true</bool>
+    <bool name="config_wifiUpdateCountryCodeFromScanResultGeneric">true</bool>
+    <bool name="config_wifi_revert_country_code_on_cellular_loss">false</bool>
+
+    <!-- Scanning &amp; MAC randomisation. -->
     <bool name="config_wifi_background_scan_support">true</bool>
     <bool name="config_wifi_connected_mac_randomization_supported">true</bool>
     <bool name="config_wifi_p2p_mac_randomization_supported">true</bool>
-    <bool name="config_wifiSoftapSaeSupported">true</bool>
 
-    <!-- Country Code updates -->
-    <bool name="config_wifiStaDynamicCountryCodeUpdateSupported">true</bool>
-    <bool name="config_wifi_revert_country_code_on_cellular_loss">false</bool>
-    <bool name="config_wifiUpdateCountryCodeFromScanResultGeneric">true</bool>
-
-    <!-- Concurrency & HAL -->
-    <bool name="config_wifi_hal_get_usable_channels_supported">false</bool>
-    <bool name="config_wifiConcurrencyMultiStaAsPrimarySupported">false</bool>
 </resources>

@@ -177,3 +177,17 @@ on property:persist.vendor.keymaster.ready=TRUE
 
 on property:vendor.wlan.driver.status=ok
     start wificond
+
+# USB tethering: stop EthernetNetworkFactory from stealing the tethering
+# downstream interface. EthernetTracker matches host-side NCM ports with the
+# hardcoded pattern "(usb|eth)\d+" (EthernetTracker.java), so the tethering
+# interface usb0 is claimed by the Ethernet service, which provisions it as a
+# DHCP client and clears the static address Tethering just assigned. Result:
+# the host gets a DHCP lease but the gateway never exists, so no internet.
+#
+# ethernet_local_ncm_tracking_enabled_flag is the upstream kill switch for that
+# experimental auto-tracking (default true). Disabling it stops Ethernet from
+# tracking usb0 and leaves the interface to Tethering alone.
+on property:sys.boot_completed=1
+    exec -- /system/bin/device_config put tethering ethernet_local_ncm_tracking_enabled_flag false
+    exec -- /system/bin/device_config put connectivity override_tether_enable_bpf_offload false

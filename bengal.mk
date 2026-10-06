@@ -89,7 +89,7 @@ PRODUCT_PACKAGES += \
     sound_trigger.primary.bengal
 
 PRODUCT_PACKAGES += \
-    android.hardware.audio@7.0-impl \
+    android.hardware.audio@7.1-impl \
     android.hardware.audio.effect@7.0-impl \
     android.hardware.audio.service \
     android.hardware.bluetooth.audio-impl \
@@ -101,6 +101,7 @@ PRODUCT_PACKAGES += \
     firmware_aw_cali.bin_symlink \
     liba2dpoffload \
     libbatterylistener \
+    libcirrusspkrprot \
     libcomprcapture \
     libexthwplugin \
     libhdmiedid \

@@ -1068,19 +1068,28 @@ SPDX-License-Identifier: BSD-3-Clause-Clear.
            <instance>default</instance>
        </interface>
    </hal>
-   <!-- Codec2 HAl service -->
-   <!-- KEYSTONE(I79bb62a5cb734b3b8218b1b1e3d107847b0ecca6,b/290853993) -->
-   <hal format="hidl" optional="true">
-       <name>android.hardware.media.c2</name>
-       <version>1.0</version>
-       <version>1.1</version>
-       <version>1.2</version>
-       <interface>
-           <name>IComponentStore</name>
-           <instance>default</instance>
-           <instance>software</instance>
-       </interface>
-   </hal>
+<!-- Codec2 HAl service -->
+    <!-- KEYSTONE(I79bb62a5cb734b3b8218b1b1e3d107847b0ecca6,b/290853993) -->
+    <hal format="hidl" optional="true">
+        <name>android.hardware.media.c2</name>
+        <version>1.0</version>
+        <version>1.1</version>
+        <version>1.2</version>
+        <interface>
+            <name>IComponentStore</name>
+            <instance>default</instance>
+            <instance>software</instance>
+        </interface>
+    </hal>
+    <!-- NOTE: android.hardware.drm and android.hardware.wifi.hostapd are both
+         intentionally NOT listed here.
+         Both are AIDL HALs on this device (clearkey -> aidl::BnDrmFactory,
+         hostapd -> aidl::IHostapd). The AOSP framework matrices already
+         declare both as format="aidl", and AIDL HALs register without any
+         vendor-matrix entry. Adding hidl entries for them only made
+         hwservicemanager chase services that do not exist. -->
+    <!-- WiFi SoftAP settings (band + allowed security types) live in the
+         device tree rro_overlays, not here. -->
    <hal format="aidl" optional="true">
        <name>android.hardware.media.c2</name>
        <version>1</version>

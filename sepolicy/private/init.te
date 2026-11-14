@@ -1,4 +1,6 @@
 allow init property_type:file { append create getattr map open read relabelto rename setattr unlink write };
+allow init per_boot_file:file ioctl;
+allowxperm init per_boot_file:file ioctl { F2FS_IOC_SET_PIN_FILE };
 
 # During early boot, init scans and relabels files on /system and other
 # partitions. Some files (from Magisk modules) may have stale labels that

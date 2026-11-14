@@ -1,0 +1,5 @@
+# cache_logcat: rotating bring-up logcat in /cache/logs
+userdebug_or_eng(`
+  allow logger cache_file:dir rw_dir_perms;
+  allow logger cache_file:file create_file_perms;
+')

@@ -68,3 +68,10 @@ persist.sys.wfd.virtual=0
 # Zygote
 persist.device_config.runtime_native.usap_pool_enabled=true
 
+# Logd
+ro.logd.kernel=true
+# Bring-up: mirror main/system/radio/crash into the kernel log
+# (serial console). sscrpcd crash-loops every 25ms while the ADSP sensor PD
+# is down and would flood the console.
+ro.logd.kmsg_mirror=true
+ro.logd.kmsg_mirror.silence=sscrpcd

@@ -191,3 +191,20 @@ on property:vendor.wlan.driver.status=ok
 on property:sys.boot_completed=1
     exec -- /system/bin/device_config put tethering ethernet_local_ncm_tracking_enabled_flag false
     exec -- /system/bin/device_config put connectivity override_tether_enable_bpf_offload false
+
+# Persistent bring-up logs on /cache (lenovocust, ext4, mounted by
+# 'mount_all --early' in 'fs', not covered by userdata checkpointing).
+# - rotating logcat of every buffer including kernel (no kmsg limits here)
+# - sscrpcd:S again: its 25ms crash loop would rotate the real boot out of
+#   the 10MB window within minutes
+service cache_logcat /system/bin/logcat -b all -v threadtime -f /cache/logs/logcat.txt -r 2048 -n 4 sscrpcd:S *:V
+    user root
+    group root log
+    oneshot
+    disabled
+    seclabel u:r:logger:s0
+
+on post-fs && property:ro.debuggable=1
+    mkdir /cache/logs 0770 root root
+    wait_for_prop logd.ready true
+    start cache_logcat

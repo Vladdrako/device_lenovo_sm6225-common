@@ -44,3 +44,4 @@ ro.ril.oem.wifimac             u:object_r:vendor_wifimac_prop:s0
 
 # WiFi Display
 persist.vendor.setWFDInfo.     u:object_r:vendor_wfd_sys_debug_prop:s0
+ro.charger_mode_autoboot u:object_r:charger_config_prop:s0 exact bool

@@ -364,8 +364,9 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/qcom-caf/bootctrl \
     hardware/google/interfaces \
     hardware/google/pixel \
+    hardware/google/pixel/power-libperfmgr \
     hardware/lineage/interfaces/power-libperfmgr \
-    hardware/google/pixel/power-libperfmgr
+    hardware/qcom-caf/common/libqti-perfd-client
 
 # Storage
 PRODUCT_PROPERTY_OVERRIDES += \

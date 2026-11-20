@@ -65,6 +65,12 @@ DEVICE_MATRIX_FILE += $(COMMON_PATH)/compatibility_matrix.xml
 # Kernel
 BOARD_BOOT_HEADER_VERSION := 2
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_KERNEL_SEPARATED_DTBO := true
+
+# TB128FU uses a raw Qualcomm base DTB and a separate Android DTBO table.
+# Keep only the KHAJE IDP nopmi pair identified on the live device.
+TARGET_DTB_LIST_WILDCARD := vendor/qcom/khaje
+BOARD_DTBO_CFG := $(COMMON_PATH)/configs/kernel/$(TARGET_DEVICE).cfg
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_IMAGE_NAME  := Image.gz
 BOARD_KERNEL_OFFSET      := 0x00008000
@@ -82,8 +88,6 @@ BOARD_KERNEL_CMDLINE += \
     service_locator.enable=1 \
     swiotlb=2048
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
-BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
 TARGET_KERNEL_CONFIG := grass-perf_defconfig
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_SOURCE := kernel/lenovo/tb128fu
@@ -200,12 +204,6 @@ TARGET_USES_MINIGBM := false
 # Init
 $(call soong_config_set,libinit,vendor_init_lib,//$(COMMON_PATH):init_lenovo_bengal)
 TARGET_RECOVERY_DEVICE_MODULES := init_lenovo_bengal
-
-# Prebuilt dtb/dtbo
-TARGET_PREBUILT_DTB := $(COMMON_PATH)/prebuilt/dtb.img
-TARGET_PREBUILT_RECOVERY_DTBO := $(COMMON_PATH)/prebuilt/dtbo.img
-BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(TARGET_PREBUILT_RECOVERY_DTBO)
-BOARD_PREBUILT_DTBIMAGE_DIR := $(COMMON_PATH)/prebuilt
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)

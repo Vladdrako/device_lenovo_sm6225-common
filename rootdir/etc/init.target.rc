@@ -133,47 +133,6 @@ on property:init.svc.vendor.per_mgr=running
 on property:sys.shutdown.requested=*
     stop vendor.per_proxy
 
-service dcvs-sh /vendor/bin/init.qti.dcvs.sh
-    class late_start
-    user root
-    group root system
-    disabled
-    oneshot
-
-on property:vendor.dcvs.prop=1
-   start dcvs-sh
-
-#+ bug 697284,zhaizhenhong.wt,ADD,20211216,bind and set vendor.wt.rpmb_status
-on boot
-    start wt_tee_check
-
-#- bug 697284,zhaizhenhong.wt,ADD,20211216,bind and set vendor.wt.rpmb_status
-service wt_tee_check /vendor/bin/wt_tee_check --tee_set
-    class core
-    user root
-    group root
-    oneshot
-    disabled
-    seclabel u:r:tee:s0
-
-#+ExtR baiyun1.wt,ADD, 20220304, add user getprop ro.odm.lenovo.attestationkey
-service check_keymaster /vendor/bin/check_keymaster
-    class main
-    user system
-    group system
-    oneshot
-    disabled
-    seclabel u:r:check_keymaster:s0
-
-on fs
-    start check_keymaster
-
-on property:persist.vendor.keymaster.ready=FALSE
-    setprop ro.odm.lenovo.attestationkey 0
-
-on property:persist.vendor.keymaster.ready=TRUE
-    setprop ro.odm.lenovo.attestationkey 1
-#-ExtR baiyun1.wt,ADD, 20220304, add user getprop ro.odm.lenovo.attestationkey
 
 on property:vendor.wlan.driver.status=ok
     start wificond

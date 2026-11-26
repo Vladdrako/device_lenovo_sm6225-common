@@ -29,7 +29,7 @@ dontaudit { untrusted_app untrusted_app_32 } mirror_data_file:dir getattr;
 dontaudit { untrusted_app untrusted_app_32 } linkerconfig_file:dir getattr;
 dontaudit { untrusted_app untrusted_app_32 } sysfs:dir read;
 dontaudit { untrusted_app untrusted_app_32 } { proc_interrupts proc_max_map_count proc_version }:file read;
-dontaudit { untrusted_app untrusted_app_32 } qemu_sf_lcd_density_prop:file read;
+dontaudit untrusted_app_all qemu_sf_lcd_density_prop:file read;
 dontaudit { untrusted_app untrusted_app_32 } metadata_file:dir getattr;
 dontaudit { untrusted_app untrusted_app_32 } video_device:chr_file getattr;
 dontaudit { untrusted_app untrusted_app_32 } vm_data_file:dir getattr;

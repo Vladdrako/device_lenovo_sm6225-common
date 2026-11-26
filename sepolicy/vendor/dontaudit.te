@@ -36,7 +36,8 @@ dontaudit {
   vendor_qti
 } vendor_diag_device:chr_file rw_file_perms;
 
-dontaudit untrusted_app proc_tty_drivers:file { read open getattr };
+dontaudit untrusted_app_all proc_tty_drivers:file { read open getattr };
+dontaudit untrusted_app_all vendor_sysfs_devfreq:dir search;
 dontaudit untrusted_app qemu_hw_prop:file { read open getattr };
 dontaudit untrusted_app self:netlink_route_socket { bind nlmsg_readpriv nlmsg_getneigh };
 dontaudit priv_app device:dir open;

@@ -20,3 +20,6 @@ dontaudit untrusted_app dex2oat_exec:file getattr;
 # Note: system_suspend is a private type, so this dontaudit lives here
 # instead of vendor/dontaudit.te.
 dontaudit system_suspend { default_prop vendor_default_prop }:file r_file_perms;
+
+# V849 AdrenoOsLib probes default/misctrl properties from mediacodec
+dontaudit mediacodec { default_prop misctrl_prop }:file r_file_perms;

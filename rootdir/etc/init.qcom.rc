@@ -29,11 +29,6 @@ import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
 
 on early-init
-  # create symlink for vendor mount points
-    symlink /vendor/firmware_mnt /firmware
-    symlink /vendor/bt_firmware /bt_firmware
-    symlink /vendor/dsp /dsp
-
   # SSR
     write /sys/bus/msm_subsys/devices/subsys0/restart_level RELATED
     write /sys/bus/msm_subsys/devices/subsys1/restart_level RELATED
@@ -89,7 +84,6 @@ on late-init
     # Start services for bootanim
     start surfaceflinger
     start bootanim
-    start vendor.configstore-hal
     start vendor.qti.hardware.display.allocator
     start vendor.qti.hardware.display.composer
 
@@ -177,9 +171,6 @@ on boot
     #Create WIGIG socket area
 
     setprop wifi.interface wlan0
-
-    #Remove SUID bit for iproute2 ip tool
-    chmod 0755 /system/bin/ip
 
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 

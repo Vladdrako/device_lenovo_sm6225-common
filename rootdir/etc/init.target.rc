@@ -34,9 +34,6 @@ on early-init
 on early-init
         exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_aw882xx
 
-on early-init
-    restorecon /dev/loop-control
-
 on init
     write /dev/stune/foreground/schedtune.sched_boost_no_override 1
     write /dev/stune/top-app/schedtune.sched_boost_no_override 1
@@ -96,8 +93,6 @@ on boot
     # Sensor
     start vendor.sensors
 
-    # Load WLAN driver
-    insmod /vendor/lib/modules/qca_cld3_wlan.ko
     mkdir /sys/kernel/debug/tracing/instances/wifi 0755 system system
     chown system system /sys/kernel/debug/tracing/instances/wifi/free_buffer
 
@@ -136,20 +131,6 @@ on property:sys.shutdown.requested=*
 
 on property:vendor.wlan.driver.status=ok
     start wificond
-
-# USB tethering: stop EthernetNetworkFactory from stealing the tethering
-# downstream interface. EthernetTracker matches host-side NCM ports with the
-# hardcoded pattern "(usb|eth)\d+" (EthernetTracker.java), so the tethering
-# interface usb0 is claimed by the Ethernet service, which provisions it as a
-# DHCP client and clears the static address Tethering just assigned. Result:
-# the host gets a DHCP lease but the gateway never exists, so no internet.
-#
-# ethernet_local_ncm_tracking_enabled_flag is the upstream kill switch for that
-# experimental auto-tracking (default true). Disabling it stops Ethernet from
-# tracking usb0 and leaves the interface to Tethering alone.
-on property:sys.boot_completed=1
-    exec -- /system/bin/device_config put tethering ethernet_local_ncm_tracking_enabled_flag false
-    exec -- /system/bin/device_config put connectivity override_tether_enable_bpf_offload false
 
 # Persistent bring-up logs on /cache (lenovocust, ext4, mounted by
 # 'mount_all --early' in 'fs', not covered by userdata checkpointing).
